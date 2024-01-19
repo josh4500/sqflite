@@ -35,7 +35,7 @@ allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 16
@@ -45,8 +45,8 @@ android {
         disable 'InvalidPackage'
     }
     dependencies {
-        implementation 'com.github.requery:sqlite-android:3.39.2'
-        implementation "androidx.sqlite:sqlite:2.0.1"
+        implementation 'com.github.requery:sqlite-android:3.43.0'
+        implementation 'androidx.sqlite:sqlite:2.4.0'
     }
 }
 
