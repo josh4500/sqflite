@@ -18,18 +18,27 @@ import 'todo_test_page.dart';
 import 'type_test_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  mainExampleApp();
+}
+
+/// Example app main entry point, exported for external application
+///
+/// might move to a different shared package.
+void mainExampleApp() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // debugAutoStartRouteName = testOpenRoute;
+  runApp(const SqfliteExampleApp());
 }
 
 /// Sqflite test app
-class MyApp extends StatefulWidget {
+class SqfliteExampleApp extends StatefulWidget {
   /// test app.
-  const MyApp({Key? key}) : super(key: key);
+  const SqfliteExampleApp({super.key});
   // This widget is the root of your application.
 
   @override
   // ignore: library_private_types_in_public_api
-  _MyAppState createState() => _MyAppState();
+  _SqfliteExampleAppState createState() => _SqfliteExampleAppState();
 }
 
 /// Simple test page.
@@ -62,10 +71,14 @@ const String testExpRoute = '/test/exp';
 /// Deprecated test page.
 const String testDeprecatedRoute = '/test/deprecated';
 
+<<<<<<< HEAD
 /// Json test page.
 const String testJsonRoute = '/test/json';
 
 class _MyAppState extends State<MyApp> {
+=======
+class _SqfliteExampleAppState extends State<SqfliteExampleApp> {
+>>>>>>> 70d127224b33594963f2df51157ad4481d41a5a4
   var routes = <String, WidgetBuilder>{
     '/test': (BuildContext context) => MyHomePage(),
     testRawRoute: (BuildContext context) => RawTestPage(),
@@ -105,7 +118,7 @@ class _MyAppState extends State<MyApp> {
 /// App home menu page.
 class MyHomePage extends StatefulWidget {
   /// App home menu page.
-  MyHomePage({Key? key, this.title}) : super(key: key) {
+  MyHomePage({super.key, this.title}) {
     _items.add(
         MainItem('Raw tests', 'Raw SQLite operations', route: testRawRoute));
     _items.add(MainItem('Open tests', 'Open onCreate/onUpgrade/onDowngrade',
@@ -167,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero).then((_) async {
+    Future<void>.delayed(Duration.zero).then((_) async {
       if (mounted) {
         // Use it to auto start a test page
         if (debugAutoStartRouteName != null) {
