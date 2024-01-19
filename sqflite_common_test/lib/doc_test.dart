@@ -1,8 +1,11 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:sqflite_common/sqflite_dev.dart';
+import 'package:sqflite_common/sqflite_logger.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common/utils/utils.dart';
 import 'package:sqflite_common/utils/utils.dart' as utils;
@@ -221,7 +224,7 @@ void run(SqfliteTestContext context) {
     });
 
     test('data_types', () async {
-      var path = inMemoryDatabasePath;
+      var path = await context.initDeleteDb('data_types.db');
 
       {
         /// Create tables
@@ -235,7 +238,7 @@ CREATE TABLE Product (
 )''');
         }
 
-// First version of the database
+        // First version of the database
         var db = await factory.openDatabase(path,
             options: OpenDatabaseOptions(
                 version: 1,
@@ -266,7 +269,8 @@ CREATE TABLE Product (
 )''');
         }
 
-// First version of the database
+        path = await context.initDeleteDb('data_types.db');
+        // First version of the database
         var db = await factory.openDatabase(path,
             options: OpenDatabaseOptions(
                 version: 1,
@@ -345,6 +349,21 @@ CREATE TABLE Product (
 
         var result = await db.query('Product');
         expect(result.length, 1, reason: 'list $result');
+
+        // Query cursor
+        var cursor = await db.rawQueryCursor(
+          'SELECT * FROM Product',
+          null,
+          bufferSize: 10,
+        );
+        try {
+          while (await cursor.moveNext()) {
+            var row = cursor.current;
+            // ...
+          }
+        } finally {
+          await cursor.close();
+        }
         await db.close();
       }
     });
@@ -416,6 +435,25 @@ CREATE TABLE Product (
       } finally {
         // ignore: deprecated_member_use
         await databaseFactory.setLogLevel(sqfliteLogLevelNone);
+      }
+    });
+
+    test('Logger', () async {
+      if (databaseFactory is! SqfliteDatabaseFactoryLogger) {
+        var factoryWithLogs = SqfliteDatabaseFactoryLogger(databaseFactory,
+            options: SqfliteLoggerOptions(
+                type: SqfliteDatabaseFactoryLoggerType.all));
+        var db = await factoryWithLogs.openDatabase(inMemoryDatabasePath,
+            options: OpenDatabaseOptions(
+                version: 1,
+                onCreate: (db, _) {
+                  db.execute('''
+  CREATE TABLE Product (
+    id TEXT PRIMARY KEY,
+    title TEXT
+   )''');
+                }));
+        await db.close();
       }
     });
 

@@ -5,7 +5,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -17,7 +16,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -27,15 +25,12 @@ allprojects {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 16
@@ -43,10 +38,6 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
-    }
-    dependencies {
-        implementation 'com.github.requery:sqlite-android:3.43.0'
-        implementation 'androidx.sqlite:sqlite:2.4.0'
     }
 }
 
