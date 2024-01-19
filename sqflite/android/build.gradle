@@ -30,7 +30,16 @@ allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 31
+    // Conditional for compatibility with AGP <4.2.	    compileSdkVersion 31
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.tekartik.sqflite'
+    }
+    compileSdkVersion 33
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         minSdkVersion 16
@@ -38,6 +47,10 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+    dependencies {
+        implementation 'com.github.requery:sqlite-android:3.39.2'
+        implementation "androidx.sqlite:sqlite:2.0.1"
     }
 }
 
